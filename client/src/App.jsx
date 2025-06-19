@@ -14,6 +14,7 @@ import PlacesFormPage from './pages/PlacesFormPage';
 import PlacePage from './pages/PlacePage';
 import SingleBookedPlace from './pages/SingleBookedPlace';
 import RefundCancellationPage from './pages/RefundCancellationPage';
+import PreBookingInquiryPage from './pages/PreBookingInquiryPage';
 import FeedbackPage from './pages/FeedbackPage';
 import axiosInstance from './utils/axios';
 import { UserProvider } from './providers/UserProvider';
@@ -50,6 +51,7 @@ function App() {
                                 element={<SingleBookedPlace />}
                             />
                             <Route path="/refund-cancellation" element={<RefundCancellationPage />} />
+                            <Route path="/pre-booking-inquiry" element={<PreBookingInquiryPage />} />
                             <Route path="/feedback" element={<FeedbackPage />} />
                             <Route path="*" element={<NotFoundPage />} />
                         </Route>
