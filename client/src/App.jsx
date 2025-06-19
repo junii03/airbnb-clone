@@ -16,6 +16,7 @@ import SingleBookedPlace from './pages/SingleBookedPlace';
 import RefundCancellationPage from './pages/RefundCancellationPage';
 import PreBookingInquiryPage from './pages/PreBookingInquiryPage';
 import FeedbackPage from './pages/FeedbackPage';
+import CheckInOutPage from './pages/CheckInOutPage';
 import axiosInstance from './utils/axios';
 import { UserProvider } from './providers/UserProvider';
 import { PlaceProvider } from './providers/PlaceProvider';
@@ -50,9 +51,14 @@ function App() {
                                 path="/account/bookings/:id"
                                 element={<SingleBookedPlace />}
                             />
+                            <Route
+                                path="/account/bookings/:id/check-in-out"
+                                element={<CheckInOutPage />}
+                            />
                             <Route path="/refund-cancellation" element={<RefundCancellationPage />} />
                             <Route path="/pre-booking-inquiry" element={<PreBookingInquiryPage />} />
                             <Route path="/feedback" element={<FeedbackPage />} />
+                            <Route path="/check-in-out" element={<CheckInOutPage />} />
                             <Route path="*" element={<NotFoundPage />} />
                         </Route>
                     </Routes>
