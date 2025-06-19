@@ -18,6 +18,7 @@ import PreBookingInquiryPage from './pages/PreBookingInquiryPage';
 import FeedbackPage from './pages/FeedbackPage';
 import CheckInOutPage from './pages/CheckInOutPage';
 import MaintenancePage from './pages/MaintenancePage';
+import FinancialPage from './pages/FinancialPage';
 import axiosInstance from './utils/axios';
 import { UserProvider } from './providers/UserProvider';
 import { PlaceProvider } from './providers/PlaceProvider';
@@ -61,6 +62,7 @@ function App() {
                             <Route path="/feedback" element={<FeedbackPage />} />
                             <Route path="/check-in-out" element={<CheckInOutPage />} />
                             <Route path="/maintenance" element={<MaintenancePage />} />
+                            <Route path="/financial" element={<FinancialPage />} />
                             <Route path="*" element={<NotFoundPage />} />
                         </Route>
                     </Routes>

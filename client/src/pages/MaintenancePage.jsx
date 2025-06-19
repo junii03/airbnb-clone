@@ -99,7 +99,7 @@ const MaintenancePage = () => {
 
     const handleSubmitRequest = async (e) => {
         e.preventDefault();
-        
+
         if (!formData.placeId || !formData.title || !formData.description) {
             toast.error('Please fill in all required fields');
             return;
@@ -109,7 +109,7 @@ const MaintenancePage = () => {
             setLoading(true);
             // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 2000));
-            
+
             const newRequest = {
                 id: Date.now(),
                 ...formData,
@@ -118,7 +118,7 @@ const MaintenancePage = () => {
                 estimatedCompletion: 'TBD',
                 place: places.find(p => p._id === formData.placeId)?.title || 'Unknown Property'
             };
-            
+
             setMaintenanceRequests(prev => [newRequest, ...prev]);
             setFormData({
                 placeId: '',
@@ -132,7 +132,7 @@ const MaintenancePage = () => {
                 preferredTime: '',
                 images: []
             });
-            
+
             toast.success('Maintenance request submitted successfully!');
             setActiveTab('requests');
         } catch (error) {
@@ -213,7 +213,7 @@ const MaintenancePage = () => {
     return (
         <div className="min-h-screen bg-gray-50">
             <AccountNav />
-            
+
             <div className="mx-auto max-w-6xl p-4">
                 {/* Header */}
                 <div className="mb-8 text-center">
@@ -230,31 +230,28 @@ const MaintenancePage = () => {
                     <nav className="flex space-x-8">
                         <button
                             onClick={() => setActiveTab('report')}
-                            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                                activeTab === 'report'
+                            className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'report'
                                     ? 'border-primary text-primary'
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                            }`}
+                                }`}
                         >
                             Report Issue
                         </button>
                         <button
                             onClick={() => setActiveTab('requests')}
-                            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                                activeTab === 'requests'
+                            className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'requests'
                                     ? 'border-primary text-primary'
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                            }`}
+                                }`}
                         >
                             My Requests ({maintenanceRequests.length})
                         </button>
                         <button
                             onClick={() => setActiveTab('analytics')}
-                            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                                activeTab === 'analytics'
+                            className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'analytics'
                                     ? 'border-primary text-primary'
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                            }`}
+                                }`}
                         >
                             Analytics
                         </button>
@@ -451,9 +448,9 @@ const MaintenancePage = () => {
                                                     {request.title}
                                                 </h3>
                                             </div>
-                                            
+
                                             <p className="text-gray-600 mb-3">{request.description}</p>
-                                            
+
                                             <div className="flex flex-wrap gap-2 mb-3">
                                                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(request.status)}`}>
                                                     {request.status.charAt(0).toUpperCase() + request.status.slice(1).replace('-', ' ')}
@@ -465,14 +462,14 @@ const MaintenancePage = () => {
                                                     {request.category.charAt(0).toUpperCase() + request.category.slice(1)}
                                                 </span>
                                             </div>
-                                            
+
                                             <div className="text-sm text-gray-500">
                                                 <p><strong>Property:</strong> {request.place}</p>
                                                 <p><strong>Reported:</strong> {request.dateReported}</p>
                                                 <p><strong>Est. Completion:</strong> {request.estimatedCompletion}</p>
                                             </div>
                                         </div>
-                                        
+
                                         <div className="flex gap-2">
                                             <Button variant="outline" size="sm">
                                                 View Details
