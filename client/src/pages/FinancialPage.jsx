@@ -170,8 +170,8 @@ const FinancialPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <AccountNav />
+        <div className="min-h-screen bg-gray-50 py-20">
+
 
             <div className="mx-auto max-w-6xl p-4">
                 {/* Header */}

@@ -80,6 +80,56 @@ const PlacePage = () => {
                             Ask About This Property
                         </Link>
                     </div>
+
+                    {/* Fraud Detection & Security Section */}
+                    <div className="mt-6 p-4 bg-red-50 rounded-2xl border border-red-100">
+                        <h3 className="text-lg font-semibold mb-2 text-red-800">Security & Safety</h3>
+                        <p className="text-red-700 text-sm mb-4">
+                            Report suspicious activities or security concerns related to this property.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <Link
+                                to="/fraud-detection"
+                                className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full transition-colors text-sm font-medium"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="h-5 w-5"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.306-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
+                                    />
+                                </svg>
+                                Report Security Issue
+                            </Link>
+                            <a
+                                href="tel:+1-800-FRAUD-HELP"
+                                className="inline-flex items-center gap-2 bg-white border border-red-600 text-red-600 px-4 py-2 rounded-full hover:bg-red-600 hover:text-white transition-colors text-sm font-medium"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="h-5 w-5"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
+                                    />
+                                </svg>
+                                Emergency Hotline
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <BookingWidget place={place} />
