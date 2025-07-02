@@ -1,18 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const { isCustomer } = require('../middlewares/user');
+const { isLoggedIn, isAdmin, optionalAuth } = require('../middlewares/user');
 
 const {
     submitFeedback,
     getFeedback,
-    getAllFeedback
+    getAllFeedback,
+    respondToFeedback
 } = require('../controllers/feedbackController');
 
-// Customer routes
-router.route('/').post(isCustomer, submitFeedback);
-router.route('/user').get(isCustomer, getFeedback);
+// Public route for feedback submission with optional authentication
+router.route('/').post(optionalAuth, submitFeedback);
+
+// User routes (authentication required - both customers and admins can access their own feedback)
+router.route('/user').get(isLoggedIn, getFeedback);
 
 // Admin routes
-router.route('/admin/all').get(require('../middlewares/user').isAdmin, getAllFeedback);
+router.route('/admin/all').get(isAdmin, getAllFeedback);
+router.route('/admin/:id/respond').put(isAdmin, respondToFeedback);
 
 module.exports = router;

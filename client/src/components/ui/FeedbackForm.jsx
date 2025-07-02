@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './dialog';
 import { Button } from './button';
+import axiosInstance from '@/utils/axios';
 
 const StarRating = ({ rating, setRating, readOnly = false }) => {
     const [hoverRating, setHoverRating] = useState(0);
@@ -20,8 +21,8 @@ const StarRating = ({ rating, setRating, readOnly = false }) => {
                 >
                     <svg
                         className={`h-6 w-6 ${star <= (hoverRating || rating)
-                                ? 'text-yellow-400 fill-current'
-                                : 'text-gray-300'
+                            ? 'text-yellow-400 fill-current'
+                            : 'text-gray-300'
                             }`}
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -69,12 +70,40 @@ const FeedbackForm = () => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate API call
-        setTimeout(() => {
+        try {
+            // Map frontend form values to backend enum values
+            const typeMapping = {
+                'service': 'general',
+                'property': 'general',
+                'app': 'bug_report',
+                'suggestion': 'suggestion',
+                'complaint': 'complaint',
+                'compliment': 'compliment'
+            };
+
+            // Map frontend form data to backend API format
+            const submissionData = {
+                type: typeMapping[formData.feedbackType] || 'general',
+                subject: formData.subject,
+                message: formData.message,
+                rating: formData.rating || null,
+                email: formData.anonymous ? null : formData.email,
+                name: formData.anonymous ? null : null
+            };
+
+            const response = await axiosInstance.post('/feedback', submissionData);
+
+            if (response.data.success) {
+                setIsSubmitting(false);
+                setShowDialog(true);
+                toast.success('Feedback submitted successfully!');
+            }
+        } catch (error) {
             setIsSubmitting(false);
-            setShowDialog(true);
-            toast.success('Feedback submitted successfully!');
-        }, 1000);
+            const message = error.response?.data?.message || 'Failed to submit feedback';
+            toast.error(message);
+            console.error('Error submitting feedback:', error);
+        }
     };
 
     const resetForm = () => {

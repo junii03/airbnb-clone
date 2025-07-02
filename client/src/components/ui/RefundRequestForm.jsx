@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './dialog';
 import { Button } from './button';
+import axiosInstance from '@/utils/axios';
 
 const RefundRequestForm = () => {
     const [formData, setFormData] = useState({
         bookingId: '',
         requestType: 'cancellation',
         reason: '',
+        name: '',
         contactEmail: '',
         additionalDetails: ''
     });
@@ -23,12 +25,45 @@ const RefundRequestForm = () => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate API call
-        setTimeout(() => {
+        try {
+            // Map frontend form values to backend enum values
+            const requestTypeMapping = {
+                'cancellation': 'cancellation',
+                'refund': 'refund',
+                'modification': 'partial_refund' // Map modification to partial_refund
+            };
+
+            const reasonMapping = {
+                'emergency': 'emergency',
+                'property_issue': 'property_issue',
+                'host_cancelled': 'host_issue',
+                'travel_restrictions': 'change_of_plans',
+                'other': 'other'
+            };
+
+            // Map frontend form data to backend API format
+            const submissionData = {
+                bookingReference: formData.bookingId,
+                requestType: requestTypeMapping[formData.requestType] || 'refund',
+                reason: reasonMapping[formData.reason] || 'other',
+                name: formData.name,
+                email: formData.contactEmail,
+                description: formData.additionalDetails
+            };
+
+            const response = await axiosInstance.post('/refunds', submissionData);
+
+            if (response.data.success) {
+                setIsSubmitting(false);
+                setShowDialog(true);
+                toast.success('Request submitted successfully!');
+            }
+        } catch (error) {
             setIsSubmitting(false);
-            setShowDialog(true);
-            toast.success('Request submitted successfully!');
-        }, 1000);
+            const message = error.response?.data?.message || 'Failed to submit request';
+            toast.error(message);
+            console.error('Error submitting refund request:', error);
+        }
     };
 
     const resetForm = () => {
@@ -36,6 +71,7 @@ const RefundRequestForm = () => {
             bookingId: '',
             requestType: 'cancellation',
             reason: '',
+            name: '',
             contactEmail: '',
             additionalDetails: ''
         });
@@ -51,6 +87,22 @@ const RefundRequestForm = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Name */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Full Name *
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="Enter your full name"
+                            required
+                        />
+                    </div>
+
                     {/* Booking ID */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">

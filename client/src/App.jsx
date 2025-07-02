@@ -16,6 +16,7 @@ import PlacePage from './pages/PlacePage';
 import SingleBookedPlace from './pages/SingleBookedPlace';
 import RefundCancellationPage from './pages/RefundCancellationPage';
 import PreBookingInquiryPage from './pages/PreBookingInquiryPage';
+import MyInquiriesPage from './pages/MyInquiriesPage';
 import FeedbackPage from './pages/FeedbackPage';
 import CheckInOutPage from './pages/CheckInOutPage';
 import MaintenancePage from './pages/MaintenancePage';
@@ -25,7 +26,12 @@ import AdminLoginPage from './pages/AdminLoginPage';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminAccommodations from './pages/AdminAccommodations';
 import AdminAccommodationForm from './pages/AdminAccommodationForm';
+import AdminInquiriesPage from './pages/AdminInquiriesPage';
+import AdminFeedbackPage from './pages/AdminFeedbackPage';
+import AdminRefundsPage from './pages/AdminRefundsPage';
 import NotFoundPage from './pages/NotFoundPage';
+import MyFeedbackPage from './pages/MyFeedbackPage';
+import MyRefundsPage from './pages/MyRefundsPage';
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { UserProvider } from './providers/UserProvider';
@@ -89,6 +95,21 @@ function App() {
                                     <FeedbackPage />
                                 </CustomerRoute>
                             } />
+                            <Route path="/my-inquiries" element={
+                                <CustomerRoute>
+                                    <MyInquiriesPage />
+                                </CustomerRoute>
+                            } />
+                            <Route path="/my-feedback" element={
+                                <CustomerRoute>
+                                    <MyFeedbackPage />
+                                </CustomerRoute>
+                            } />
+                            <Route path="/my-refunds" element={
+                                <CustomerRoute>
+                                    <MyRefundsPage />
+                                </CustomerRoute>
+                            } />
 
                             {/* Admin authentication routes */}
                             <Route path="/admin/login" element={<AdminLoginPage />} />
@@ -112,6 +133,21 @@ function App() {
                             <Route path="/admin/accommodations/edit/:id" element={
                                 <AdminRoute>
                                     <AdminAccommodationForm />
+                                </AdminRoute>
+                            } />
+                            <Route path="/admin/inquiries" element={
+                                <AdminRoute>
+                                    <AdminInquiriesPage />
+                                </AdminRoute>
+                            } />
+                            <Route path="/admin/feedback" element={
+                                <AdminRoute>
+                                    <AdminFeedbackPage />
+                                </AdminRoute>
+                            } />
+                            <Route path="/admin/refunds" element={
+                                <AdminRoute>
+                                    <AdminRefundsPage />
                                 </AdminRoute>
                             } />
                             <Route path="/admin/financial" element={

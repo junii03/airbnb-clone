@@ -203,6 +203,69 @@ const AdminDashboard = () => {
                                 </div>
                             </div>
                         </Link>
+
+                        <Link
+                            to="/admin/inquiries"
+                            className="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200 hover:border-red-300"
+                        >
+                            <div className="flex items-center">
+                                <div className="flex-shrink-0">
+
+                                    <svg className="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+
+                                </div>
+                                <div className="ml-4">
+                                    <h4 className="text-lg font-semibold text-gray-900">Inquiries</h4>
+                                    <p className="text-gray-600">Pre Booking Inquiries</p>
+                                </div>
+                            </div>
+                        </Link>
+
+
+                        <Link
+                            to="/admin/feedback"
+                            className="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200 hover:border-red-300"
+                        >
+                            <div className="flex items-center">
+                                <div className="flex-shrink-0">
+
+                                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10m0 0V6a2 2 0 00-2-2H9a2 2 0 00-2 2v2m0 0v10a2 2 0 002 2h6a2 2 0 002-2V8M9 12h6" />
+                                    </svg>
+
+                                </div>
+                                <div className="ml-4">
+                                    <h4 className="text-lg font-semibold text-gray-900">Feedback</h4>
+                                    <p className="text-gray-600">Respond to feedbacks</p>
+                                </div>
+                            </div>
+                        </Link>
+
+
+
+                        <Link
+                            to="/admin/refunds"
+                            className="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200 hover:border-red-300"
+                        >
+                            <div className="flex items-center">
+                                <div className="flex-shrink-0">
+
+                                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" />
+                                    </svg>
+
+                                </div>
+                                <div className="ml-4">
+                                    <h4 className="text-lg font-semibold text-gray-900">Refunds</h4>
+                                    <p className="text-gray-600">Respond to Refund Requests</p>
+                                </div>
+                            </div>
+                        </Link>
+
+
+
                     </div>
                 </div>
             </div>

@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { useSearchParams } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './dialog';
 import { Button } from './button';
+import axiosInstance from '@/utils/axios';
 
 const InquiryForm = () => {
     const [searchParams] = useSearchParams();
@@ -44,12 +45,19 @@ const InquiryForm = () => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate API call
-        setTimeout(() => {
+        try {
+            const response = await axiosInstance.post('/inquiries/submit', formData);
+
+            if (response.data.success) {
+                setIsSubmitting(false);
+                setShowDialog(true);
+                toast.success('Inquiry submitted successfully!');
+            }
+        } catch (error) {
             setIsSubmitting(false);
-            setShowDialog(true);
-            toast.success('Inquiry submitted successfully!');
-        }, 1000);
+            toast.error(error.response?.data?.message || 'Failed to submit inquiry');
+            console.error('Error submitting inquiry:', error);
+        }
     };
 
     const resetForm = () => {

@@ -19,19 +19,18 @@ const AdminNav = () => {
                 <div className="flex justify-between items-center py-4">
 
 
-
-
-                    <span className="text-sm text-gray-600">
-                        Welcome, {auth.user?.name}
-                    </span>
-                    <button
-                        onClick={() => auth.logout()}
-                        className="text-sm text-red-600 hover:text-red-800 font-medium p-2 rounded-lg transition-colors"
-                    >
-                        Logout
-                    </button>
-
-
+                    {/* User Info and Logout */}
+                    <div className="flex items-center gap-4">
+                        <span className="text-sm text-gray-600">
+                            Welcome, {auth.user?.name}
+                        </span>
+                        <button
+                            onClick={() => auth.logout()}
+                            className="text-sm text-red-600 hover:text-red-800 font-medium p-2 rounded-lg transition-colors"
+                        >
+                            Logout
+                        </button>
+                    </div>
                 </div>
             </div>
         </nav>
