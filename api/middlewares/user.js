@@ -26,3 +26,86 @@ exports.isLoggedIn = async (req, res, next) => {
         });
     }
 };
+
+// Checks if user is admin
+exports.isAdmin = async (req, res, next) => {
+    try {
+        // First check if user is logged in
+        const token = req.cookies.token || req.header('Authorization').replace('Bearer ', '');
+
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: 'Admin access required - Please login',
+            });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id);
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'User not found',
+            });
+        }
+
+        // Check if user is admin
+        if (!user.isAdmin && user.role !== 'admin') {
+            return res.status(403).json({
+                success: false,
+                message: 'Admin access required',
+            });
+        }
+
+        req.user = user;
+        next();
+    } catch (error) {
+        console.error('Admin verification error:', error);
+        return res.status(401).json({
+            success: false,
+            message: 'Invalid token',
+        });
+    }
+};
+
+// Checks if user is customer (not admin) - for customer-only endpoints
+exports.isCustomer = async (req, res, next) => {
+    try {
+        const token = req.cookies.token || req.header('Authorization').replace('Bearer ', '');
+
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: 'Customer access required - Please login',
+            });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id);
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'User not found',
+            });
+        }
+
+        // Check if user is NOT admin (customer only)
+        if (user.isAdmin || user.role === 'admin') {
+            return res.status(403).json({
+                success: false,
+                message: 'This endpoint is for customers only. Please use admin endpoints.',
+            });
+        }
+
+        req.user = user;
+        next();
+    } catch (error) {
+        console.error('Customer verification error:', error);
+        return res.status(401).json({
+            success: false,
+            message: 'Invalid token',
+        });
+    }
+};

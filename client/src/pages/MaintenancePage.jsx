@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import AccountNav from '../components/ui/AccountNav';
+import AdminNav from '../components/ui/AdminNav';
+import { useAuth } from '../../hooks';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -11,6 +12,7 @@ import axiosInstance from '../utils/axios';
 
 const MaintenancePage = () => {
     const navigate = useNavigate();
+    const auth = useAuth();
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('report');
     const [places, setPlaces] = useState([]);
@@ -66,21 +68,49 @@ const MaintenancePage = () => {
     ];
 
     useEffect(() => {
+        // Check if user is admin using the auth context
+        if (!auth.user || !auth.user.isAdmin || auth.user.role !== 'admin') {
+            return;
+        }
+
         fetchPlaces();
         setMaintenanceRequests(mockRequests);
-    }, []);
+    }, [auth.user]);
 
     const fetchPlaces = async () => {
         try {
             setLoading(true);
-            const { data } = await axiosInstance.get('places/user-places');
-            setPlaces(data);
+            const { data } = await axiosInstance.get('/places/admin/list');
+            console.log('Admin places response:', data);
+
+            // Handle the response format consistently
+            if (data.success && Array.isArray(data.places)) {
+                setPlaces(data.places);
+            } else if (Array.isArray(data)) {
+                setPlaces(data);
+            } else {
+                setPlaces([]);
+            }
         } catch (error) {
             console.log('Error fetching places:', error);
+            // Fallback to public places if admin endpoint fails
+            try {
+                const { data } = await axiosInstance.get('/places');
+                setPlaces(Array.isArray(data.places) ? data.places : []);
+            } catch (fallbackError) {
+                console.log('Fallback error:', fallbackError);
+                setPlaces([]); // Ensure places is always an array
+                toast.error('Failed to load properties');
+            }
         } finally {
             setLoading(false);
         }
     };
+
+    // Check authentication using the auth context
+    if (!auth.user || !auth.user.isAdmin || auth.user.role !== 'admin') {
+        return <Navigate to="/admin/login" />;
+    }
 
     const handleInputChange = (e) => {
         const { name, value, type, files } = e.target;
@@ -211,10 +241,11 @@ const MaintenancePage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-20">
+        <div className="min-h-screen bg-gray-50">
+            {/* Use AdminNav component */}
+            <AdminNav />
 
-
-            <div className="mx-auto max-w-6xl p-4">
+            <div className="mx-auto max-w-6xl p-4 pt-6">
                 {/* Header */}
                 <div className="mb-8 text-center">
                     <h1 className="text-3xl font-bold text-gray-900 md:text-4xl">
@@ -282,7 +313,7 @@ const MaintenancePage = () => {
                                         required
                                     >
                                         <option value="">Select a property</option>
-                                        {places.map((place) => (
+                                        {Array.isArray(places) && places.map((place) => (
                                             <option key={place._id} value={place._id}>
                                                 {place.title}
                                             </option>

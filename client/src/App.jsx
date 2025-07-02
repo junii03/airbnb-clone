@@ -4,6 +4,7 @@ import { Slide, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Layout from './components/ui/Layout';
+import { ProtectedRoute, AdminRoute, CustomerRoute } from './components/ui/ProtectedRoute';
 import IndexPage from './pages/IndexPage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
@@ -20,12 +21,17 @@ import CheckInOutPage from './pages/CheckInOutPage';
 import MaintenancePage from './pages/MaintenancePage';
 import FinancialPage from './pages/FinancialPage';
 import FraudDetectionPage from './pages/FraudDetectionPage';
-import axiosInstance from './utils/axios';
+import AdminLoginPage from './pages/AdminLoginPage';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminAccommodations from './pages/AdminAccommodations';
+import AdminAccommodationForm from './pages/AdminAccommodationForm';
+import NotFoundPage from './pages/NotFoundPage';
+
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { UserProvider } from './providers/UserProvider';
 import { PlaceProvider } from './providers/PlaceProvider';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import axiosInstance from './utils/axios';
 import { getItemFromLocalStorage } from './utils';
-import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
     useEffect(() => {
@@ -41,34 +47,110 @@ function App() {
                 <PlaceProvider>
                     <Routes>
                         <Route path="/" element={<Layout />}>
+                            {/* Public routes */}
                             <Route index element={<IndexPage />} />
                             <Route path="/login" element={<LoginPage />} />
                             <Route path="/register" element={<RegisterPage />} />
-                            <Route path="/account" element={<ProfilePage />} />
-                            <Route path="/account/places" element={<PlacesPage />} />
-                            <Route path="/account/places/new" element={<PlacesFormPage />} />
-                            <Route path="/account/places/:id" element={<PlacesFormPage />} />
                             <Route path="/place/:id" element={<PlacePage />} />
-                            <Route path="/account/bookings" element={<BookingsPage />} />
-                            <Route
-                                path="/account/bookings/:id"
-                                element={<SingleBookedPlace />}
-                            />
-                            <Route
-                                path="/account/bookings/:id/check-in-out"
-                                element={<CheckInOutPage />}
-                            />
-                            <Route path="/refund-cancellation" element={<RefundCancellationPage />} />
-                            <Route path="/pre-booking-inquiry" element={<PreBookingInquiryPage />} />
-                            <Route path="/feedback" element={<FeedbackPage />} />
-                            <Route path="/check-in-out" element={<CheckInOutPage />} />
-                            <Route path="/maintenance" element={<MaintenancePage />} />
-                            <Route path="/financial" element={<FinancialPage />} />
-                            <Route path="/fraud-detection" element={<FraudDetectionPage />} />
+
+                            {/* Customer-only routes */}
+                            <Route path="/account" element={
+                                <CustomerRoute>
+                                    <ProfilePage />
+                                </CustomerRoute>
+                            } />
+                            <Route path="/account/bookings" element={
+                                <CustomerRoute>
+                                    <BookingsPage />
+                                </CustomerRoute>
+                            } />
+                            <Route path="/account/bookings/:id" element={
+                                <CustomerRoute>
+                                    <SingleBookedPlace />
+                                </CustomerRoute>
+                            } />
+                            <Route path="/account/bookings/:id/check-in-out" element={
+                                <CustomerRoute>
+                                    <CheckInOutPage />
+                                </CustomerRoute>
+                            } />
+                            <Route path="/refund-cancellation" element={
+                                <CustomerRoute>
+                                    <RefundCancellationPage />
+                                </CustomerRoute>
+                            } />
+                            <Route path="/pre-booking-inquiry" element={
+                                <CustomerRoute>
+                                    <PreBookingInquiryPage />
+                                </CustomerRoute>
+                            } />
+                            <Route path="/feedback" element={
+                                <CustomerRoute>
+                                    <FeedbackPage />
+                                </CustomerRoute>
+                            } />
+
+                            {/* Admin authentication routes */}
+                            <Route path="/admin/login" element={<AdminLoginPage />} />
+
+                            {/* Admin-only routes */}
+                            <Route path="/admin/dashboard" element={
+                                <AdminRoute>
+                                    <AdminDashboard />
+                                </AdminRoute>
+                            } />
+                            <Route path="/admin/accommodations" element={
+                                <AdminRoute>
+                                    <AdminAccommodations />
+                                </AdminRoute>
+                            } />
+                            <Route path="/admin/accommodations/new" element={
+                                <AdminRoute>
+                                    <AdminAccommodationForm />
+                                </AdminRoute>
+                            } />
+                            <Route path="/admin/accommodations/edit/:id" element={
+                                <AdminRoute>
+                                    <AdminAccommodationForm />
+                                </AdminRoute>
+                            } />
+                            <Route path="/admin/financial" element={
+                                <AdminRoute>
+                                    <FinancialPage />
+                                </AdminRoute>
+                            } />
+                            <Route path="/admin/maintenance" element={
+                                <AdminRoute>
+                                    <MaintenancePage />
+                                </AdminRoute>
+                            } />
+                            <Route path="/admin/fraud-detection" element={
+                                <AdminRoute>
+                                    <FraudDetectionPage />
+                                </AdminRoute>
+                            } />
+
+                            {/* Remove old incorrect routes */}
+                            <Route path="/account/places" element={
+                                <AdminRoute>
+                                    <PlacesPage />
+                                </AdminRoute>
+                            } />
+                            <Route path="/account/places/new" element={
+                                <AdminRoute>
+                                    <PlacesFormPage />
+                                </AdminRoute>
+                            } />
+                            <Route path="/account/places/:id" element={
+                                <AdminRoute>
+                                    <PlacesFormPage />
+                                </AdminRoute>
+                            } />
+
                             <Route path="*" element={<NotFoundPage />} />
                         </Route>
                     </Routes>
-                    <ToastContainer autoClose={2000} transition={Slide} />
+                    <ToastContainer autoClose={1500} transition={Slide} />
                 </PlaceProvider>
             </UserProvider>
         </GoogleOAuthProvider>

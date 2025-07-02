@@ -14,6 +14,9 @@ export const Header = () => {
     const [hasShadow, setHasShadow] = useState(false);
     const { user } = auth;
 
+    // Check if user is admin
+    const isAdmin = user?.isAdmin && user?.role === 'admin';
+
     const handleScroll = () => {
         const shouldHaveShadow = window.scrollY > 0;
         setHasShadow(shouldHaveShadow);
@@ -59,53 +62,88 @@ export const Header = () => {
 
                 {/* Navigation Links */}
                 <div className="flex items-center gap-4">
-                    {/* Refund & Cancellation Link */}
-                    <Link
-                        to="/refund-cancellation"
-                        className="hidden md:flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="h-5 w-5 text-primary"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
-                            />
-                        </svg>
-                        <span className="text-sm font-medium text-gray-700">Support</span>
-                    </Link>
+                    {/* Customer-only links */}
+                    {user && !isAdmin && (
+                        <>
+                            {/* Refund & Cancellation Link */}
+                            <Link
+                                to="/refund-cancellation"
+                                className="hidden md:flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="h-5 w-5 text-primary"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                                    />
+                                </svg>
+                                <span className="text-sm font-medium text-gray-700">Support</span>
+                            </Link>
 
-                    {/* Feedback Link */}
-                    <Link
-                        to="/feedback"
-                        className="hidden md:flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="h-5 w-5 text-primary"
+                            {/* Feedback Link */}
+                            <Link
+                                to="/feedback"
+                                className="hidden md:flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="h-5 w-5 text-primary"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"
+                                    />
+                                </svg>
+                                <span className="text-sm font-medium text-gray-700">Feedback</span>
+                            </Link>
+                        </>
+                    )}
+
+                    {/* Admin-only link */}
+                    {isAdmin && (
+                        <Link
+                            to="/admin/dashboard"
+                            className="hidden md:flex items-center gap-2 px-3 py-2 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
                         >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"
-                            />
-                        </svg>
-                        <span className="text-sm font-medium text-gray-700">Feedback</span>
-                    </Link>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="h-5 w-5 text-blue-600"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m0 0L9 3m0 0l1.5 3M9 3v3m6 9h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0M3.75 15H7.5m0 0l1.5 3m0 0l1.5-3M9 15v3"
+                                />
+                            </svg>
+                            <span className="text-sm font-medium text-blue-700">Admin Panel</span>
+                        </Link>
+                    )}
 
                     {/* User Account Link */}
                     <Link
-                        to={user ? '/account' : '/login'}
+                        to={
+                            user
+                                ? isAdmin
+                                    ? '/admin/dashboard'
+                                    : '/account'
+                                : '/login'
+                        }
                         className="flex h-full items-center gap-2 rounded-full border-gray-300 py-1 px-2 md:border"
                     >
                         <svg

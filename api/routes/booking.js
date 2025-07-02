@@ -1,13 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { isLoggedIn } = require('../middlewares/user');
+const { isLoggedIn, isAdmin, isCustomer } = require('../middlewares/user');
 
 const {
-  createBookings,
-  getBookings,
+    createBookings,
+    getBookings,
+    getAllBookings,
 } = require('../controllers/bookingController');
 
-// Protected routes (user must be logged in)
-router.route('/').get(isLoggedIn, getBookings).post(isLoggedIn, createBookings);
+// Customer routes - use isCustomer middleware to prevent admin access
+router.route('/').get(isCustomer, getBookings).post(isCustomer, createBookings);
+
+// Admin routes for viewing all bookings
+router.route('/admin/all').get(isAdmin, getAllBookings);
 
 module.exports = router;
