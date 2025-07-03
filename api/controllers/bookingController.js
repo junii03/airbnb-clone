@@ -1,4 +1,5 @@
 const Booking = require('../models/Booking');
+const Place = require('../models/Place');
 
 // Books a place
 exports.createBookings = async (req, res) => {
@@ -6,6 +7,22 @@ exports.createBookings = async (req, res) => {
         const userData = req.user;
         const { place, checkIn, checkOut, numOfGuests, name, phone, price } =
             req.body;
+
+        // Check if the user is trying to book their own accommodation
+        const placeData = await Place.findById(place);
+
+        if (!placeData) {
+            return res.status(404).json({
+                message: 'Accommodation not found',
+            });
+        }
+
+        // Prevent users from booking their own accommodations
+        if (placeData.owner.toString() === userData.id) {
+            return res.status(403).json({
+                message: 'You cannot book your own accommodation',
+            });
+        }
 
         const booking = await Booking.create({
             user: userData.id,

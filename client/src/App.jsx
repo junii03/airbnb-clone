@@ -111,6 +111,30 @@ function App() {
                                 </CustomerRoute>
                             } />
 
+                            {/* User accommodation management routes */}
+                            <Route path="/account/places" element={
+                                <CustomerRoute>
+                                    <PlacesPage />
+                                </CustomerRoute>
+                            } />
+                            <Route path="/account/places/new" element={
+                                <CustomerRoute>
+                                    <PlacesFormPage />
+                                </CustomerRoute>
+                            } />
+                            <Route path="/account/places/:id" element={
+                                <CustomerRoute>
+                                    <PlacesFormPage />
+                                </CustomerRoute>
+                            } />
+
+                            {/* Maintenance page - available to all users */}
+                            <Route path="/maintenance" element={
+                                <CustomerRoute>
+                                    <MaintenancePage />
+                                </CustomerRoute>
+                            } />
+
                             {/* Admin authentication routes */}
                             <Route path="/admin/login" element={<AdminLoginPage />} />
 
@@ -163,23 +187,6 @@ function App() {
                             <Route path="/admin/fraud-detection" element={
                                 <AdminRoute>
                                     <FraudDetectionPage />
-                                </AdminRoute>
-                            } />
-
-                            {/* Remove old incorrect routes */}
-                            <Route path="/account/places" element={
-                                <AdminRoute>
-                                    <PlacesPage />
-                                </AdminRoute>
-                            } />
-                            <Route path="/account/places/new" element={
-                                <AdminRoute>
-                                    <PlacesFormPage />
-                                </AdminRoute>
-                            } />
-                            <Route path="/account/places/:id" element={
-                                <AdminRoute>
-                                    <PlacesFormPage />
                                 </AdminRoute>
                             } />
 

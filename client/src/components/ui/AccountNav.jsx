@@ -67,6 +67,24 @@ const AccountNav = () => {
                         My bookings
                     </Link>
 
+                    <Link className={linkClasses('places')} to={'/account/places'}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="h-6 w-6"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M2.25 21h19.5m-18-18v18m2.25-18v18m13.5-18v18m2.25-18v18M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3a.75.75 0 01.75-.75h.75a.75.75 0 01.75.75v3"
+                            />
+                        </svg>
+                        My accommodations
+                    </Link>
+
                     <Link className={linkClasses('inquiries')} to={'/my-inquiries'}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

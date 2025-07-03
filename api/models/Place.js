@@ -28,6 +28,12 @@ const placeSchema = new mongoose.Schema({
     price: {
         type: Number,
     },
+    isActive: {
+        type: Boolean,
+        default: true,
+    },
+}, {
+    timestamps: true,
 });
 
 const Place = mongoose.model("Place", placeSchema);

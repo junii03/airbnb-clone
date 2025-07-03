@@ -44,11 +44,13 @@ exports.userPlaces = async (req, res) => {
     try {
         const userData = req.user;
 
-        console.log('Admin places request from user:', userData.email, 'isAdmin:', userData.isAdmin, 'role:', userData.role);
+        console.log('Places request from user:', userData.email, 'isAdmin:', userData.isAdmin, 'role:', userData.role);
 
-        // If user is admin, return all places for management
+        // If user is admin, return all places with owner details for management
         if (userData.isAdmin && userData.role === 'admin') {
-            const allPlaces = await Place.find().populate('owner', 'name email');
+            const allPlaces = await Place.find()
+                .populate('owner', 'name email')
+                .sort({ createdAt: -1 });
             console.log('Found', allPlaces.length, 'places for admin');
             return res.status(200).json({
                 success: true,
@@ -57,8 +59,9 @@ exports.userPlaces = async (req, res) => {
             });
         }
 
-        // For regular users, return their own places (though they shouldn't have any)
-        const userPlaces = await Place.find({ owner: userData.id });
+        // For regular users, return only their own places
+        const userPlaces = await Place.find({ owner: userData.id })
+            .sort({ createdAt: -1 });
         res.status(200).json({
             success: true,
             places: userPlaces,
@@ -74,7 +77,7 @@ exports.userPlaces = async (req, res) => {
     }
 };
 
-// Updates a place
+// Updates a place (only owner can update their own place)
 exports.updatePlace = async (req, res) => {
     try {
         const userData = req.user;
@@ -92,22 +95,37 @@ exports.updatePlace = async (req, res) => {
         } = req.body;
 
         const place = await Place.findById(id);
-        if (userId === place.owner.toString()) {
-            place.set({
-                title,
-                address,
-                photos: addedPhotos,
-                description,
-                perks,
-                extraInfo,
-                maxGuests,
-                price,
-            });
-            await place.save();
-            res.status(200).json({
-                message: 'place updated!',
+
+        if (!place) {
+            return res.status(404).json({
+                message: 'Place not found',
             });
         }
+
+        // Only the owner can update their place
+        if (userId !== place.owner.toString()) {
+            return res.status(403).json({
+                message: 'You can only update your own accommodations',
+            });
+        }
+
+        place.set({
+            title,
+            address,
+            photos: addedPhotos,
+            description,
+            perks,
+            extraInfo,
+            maxGuests,
+            price,
+        });
+
+        await place.save();
+        res.status(200).json({
+            success: true,
+            message: 'Place updated successfully!',
+            place
+        });
     } catch (err) {
         res.status(500).json({
             message: 'Internal server error',
@@ -134,7 +152,7 @@ exports.getPlaces = async (req, res) => {
 exports.singlePlace = async (req, res) => {
     try {
         const { id } = req.params;
-        const place = await Place.findById(id);
+        const place = await Place.findById(id).populate('owner', '_id name email');
         if (!place) {
             return res.status(400).json({
                 message: 'Place not found',
@@ -145,7 +163,7 @@ exports.singlePlace = async (req, res) => {
         });
     } catch (err) {
         res.status(500).json({
-            message: 'Internal serever error',
+            message: 'Internal server error',
         });
     }
 };

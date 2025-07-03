@@ -19,6 +19,9 @@ const PlacePage = () => {
     // Check if user is admin
     const isAdmin = user?.isAdmin && user?.role === 'admin';
 
+    // Check if current user is the owner of this accommodation
+    const isOwner = user && place?.owner && (user.id === place.owner._id || user.id === place.owner);
+
     useEffect(() => {
         if (!id) {
             return '';
@@ -58,8 +61,8 @@ const PlacePage = () => {
                     Max number of guests: {place.maxGuests}
                     <PerksWidget perks={place?.perks} />
 
-                    {/* Pre-booking Inquiry Button - Hidden for admin */}
-                    {!isAdmin && (
+                    {/* Pre-booking Inquiry Button - Hidden for admin and accommodation owner */}
+                    {!isAdmin && !isOwner && (
                         <div className="mt-6 p-4 bg-gray-50 rounded-2xl">
                             <h3 className="text-lg font-semibold mb-2">Have Questions?</h3>
                             <p className="text-gray-600 text-sm mb-4">
@@ -88,8 +91,8 @@ const PlacePage = () => {
                         </div>
                     )}
 
-                    {/* Fraud Detection & Security Section - Hidden for admin */}
-                    {!isAdmin && (
+                    {/* Fraud Detection & Security Section - Hidden for admin and accommodation owner */}
+                    {!isAdmin && !isOwner && (
                         <div className="mt-6 p-4 bg-red-50 rounded-2xl border border-red-100">
                             <h3 className="text-lg font-semibold mb-2 text-red-800">Security & Safety</h3>
                             <p className="text-red-700 text-sm mb-4">

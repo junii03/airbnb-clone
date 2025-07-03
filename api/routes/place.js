@@ -20,14 +20,17 @@ router.route('/').get(getPlaces);
 router.route('/:id').get(singlePlace);
 router.route('/search/:key').get(searchPlaces);
 
-// Admin-only routes for accommodation management
-router.route('/admin/add').post(isAdmin, addPlace);
+// User routes for their own accommodations
+router.route('/user/add').post(isLoggedIn, addPlace);
+router.route('/user/list').get(isLoggedIn, userPlaces);
+router.route('/user/update').put(isLoggedIn, updatePlace);
+
+// Admin routes for viewing all accommodations and management
 router.route('/admin/list').get(isAdmin, userPlaces);
-router.route('/admin/update').put(isAdmin, updatePlace);
 router.route('/admin/:id/delete').delete(isAdmin, deletePlace);
 
-// Photo upload routes
-router.post('/upload', upload.array('photos', 20), uploadPhotos);
-router.post('/upload-by-link', uploadPhotoByLink);
+// Photo upload routes (available to logged-in users)
+router.post('/upload', isLoggedIn, upload.array('photos', 20), uploadPhotos);
+router.post('/upload-by-link', isLoggedIn, uploadPhotoByLink);
 
 module.exports = router;

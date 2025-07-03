@@ -18,7 +18,10 @@ const BookingWidget = ({ place }) => {
     const { user } = useAuth();
 
     const { noOfGuests, name, phone } = bookingData;
-    const { _id: id, price } = place;
+    const { _id: id, price, owner } = place;
+
+    // Check if current user is the owner of this accommodation
+    const isOwner = user && owner && (user.id === owner._id || user.id === owner);
 
     useEffect(() => {
         if (user) {
@@ -46,6 +49,11 @@ const BookingWidget = ({ place }) => {
         // User must be signed in to book place
         if (!user) {
             return setRedirect(`/login`);
+        }
+
+        // Prevent users from booking their own accommodation
+        if (isOwner) {
+            return toast.error('You cannot book your own accommodation');
         }
 
         // BOOKING DATA VALIDATION
@@ -77,13 +85,48 @@ const BookingWidget = ({ place }) => {
             setRedirect(`/account/bookings/${bookingId}`);
             toast('Congratulations! Enjoy your trip.');
         } catch (error) {
-            toast.error('Something went wrong!');
+            // Handle the specific error for booking own accommodation
+            if (error.response?.status === 403) {
+                toast.error(error.response.data.message);
+            } else {
+                toast.error('Something went wrong!');
+            }
             console.log('Error: ', error);
         }
     };
 
     if (redirect) {
         return <Navigate to={redirect} />;
+    }
+
+    // Show different content if user owns this accommodation
+    if (isOwner) {
+        return (
+            <div className="rounded-2xl bg-white p-4 shadow-xl">
+                <div className="text-center">
+                    <div className="mb-4 text-xl font-semibold text-gray-700">
+                        This is Your Accommodation
+                    </div>
+                    <div className="mb-4 text-gray-600">
+                        You cannot book your own property, but you can manage it from your account.
+                    </div>
+                    <div className="space-y-2">
+                        <a
+                            href={`/account/places/${id}`}
+                            className="block w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary/90 transition-colors"
+                        >
+                            Edit This Accommodation
+                        </a>
+                        <a
+                            href="/account/places"
+                            className="block w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors"
+                        >
+                            View All My Accommodations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (

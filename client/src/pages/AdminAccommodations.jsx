@@ -76,17 +76,11 @@ const AdminAccommodations = () => {
                 <div className="mb-6 flex justify-between items-center">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900">Accommodation Management</h1>
-                        <p className="text-gray-600 mt-1">Manage all property listings</p>
+                        <p className="text-gray-600 mt-1">View and manage all user-created property listings</p>
                     </div>
-                    <Link
-                        to="/admin/accommodations/new"
-                        className="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center gap-2"
-                    >
-                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                        Add New Property
-                    </Link>
+                    <div className="text-sm text-gray-500">
+                        Total Properties: {places.length}
+                    </div>
                 </div>
 
                 {places.length === 0 ? (
@@ -95,18 +89,7 @@ const AdminAccommodations = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
                         <h3 className="mt-2 text-sm font-medium text-gray-900">No accommodations</h3>
-                        <p className="mt-1 text-sm text-gray-500">Get started by creating a new property listing.</p>
-                        <div className="mt-6">
-                            <Link
-                                to="/admin/accommodations/new"
-                                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary/90"
-                            >
-                                <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                                Add Property
-                            </Link>
-                        </div>
+                        <p className="mt-1 text-sm text-gray-500">No user has created any property listings yet.</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -123,6 +106,14 @@ const AdminAccommodations = () => {
                                 </div>
                                 <div className="p-6">
                                     <h3 className="text-lg font-medium text-gray-900 mb-2">{place.title}</h3>
+
+                                    {/* Owner Information */}
+                                    <div className="mb-3 p-2 bg-gray-50 rounded-md">
+                                        <p className="text-sm text-gray-600 font-medium">Owner:</p>
+                                        <p className="text-sm text-gray-800">{place.owner?.name || 'Unknown'}</p>
+                                        <p className="text-xs text-gray-500">{place.owner?.email || 'No email'}</p>
+                                    </div>
+
                                     <p className="text-sm text-gray-500 mb-2 flex items-center">
                                         <svg className="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -142,18 +133,17 @@ const AdminAccommodations = () => {
                                         </span>
                                     </div>
 
+                                    {/* Creation Date */}
+                                    <div className="text-xs text-gray-500 mb-4">
+                                        Created: {new Date(place.createdAt).toLocaleDateString()}
+                                    </div>
+
                                     <div className="flex space-x-2">
-                                        <Link
-                                            to={`/admin/accommodations/edit/${place._id}`}
-                                            className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-md text-sm font-medium text-center transition-colors"
-                                        >
-                                            Edit
-                                        </Link>
                                         <Link
                                             to={`/place/${place._id}`}
                                             className="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2 rounded-md text-sm font-medium text-center transition-colors"
                                         >
-                                            View
+                                            View Details
                                         </Link>
                                         <button
                                             onClick={() => handleDeletePlace(place._id)}
